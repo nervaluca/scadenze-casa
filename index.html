@@ -573,7 +573,9 @@ document.getElementById('search-clear').addEventListener('click',()=>{
 
 // ── SERVICE WORKER ─────────────────────────────────────
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    regs.forEach(r => r.unregister());
+  });
 }
 </script>
 </body>
