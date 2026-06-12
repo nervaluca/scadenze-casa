@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#1a1a2e">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Scadenze Casa">
@@ -13,65 +14,79 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0f0f1a;
-  --surface:#1a1a2e;
-  --card:#16213e;
-  --border:#2a2a4a;
-  --primary:#4f46e5;
-  --primary-light:#6366f1;
-  --danger:#ef4444;
-  --warning:#f59e0b;
-  --success:#22c55e;
-  --text:#f1f5f9;
-  --text2:#94a3b8;
-  --text3:#475569;
-  --radius:12px;
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --bg:#0f0f1a;--surface:#1a1a2e;--card:#16213e;--border:#2a2a4a;
+  --primary:#4f46e5;--danger:#ef4444;--warning:#f59e0b;--success:#22c55e;
+  --text:#f1f5f9;--text2:#94a3b8;--text3:#475569;--radius:12px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px}
 
-/* Layout */
+/* ── LOGIN ─────────────────────────────────────── */
+#login-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;z-index:1000}
+#login-screen.hidden{display:none}
+.login-logo{font-size:52px;margin-bottom:8px}
+.login-title{font-size:22px;font-weight:700;margin-bottom:4px}
+.login-sub{font-size:14px;color:var(--text2);margin-bottom:32px}
+.login-box{background:var(--surface);border-radius:16px;padding:24px;width:100%;max-width:320px;text-align:center}
+.login-box h3{font-size:16px;font-weight:600;margin-bottom:6px}
+.login-box p{font-size:13px;color:var(--text2);margin-bottom:20px}
+.pin-display{display:flex;justify-content:center;gap:10px;margin-bottom:24px}
+.pin-dot{width:14px;height:14px;border-radius:7px;border:2px solid var(--border);transition:all .15s}
+.pin-dot.filled{background:var(--primary);border-color:var(--primary)}
+.pin-dot.error{background:var(--danger);border-color:var(--danger)}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pin-btn{height:60px;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:20px;font-weight:500;cursor:pointer;transition:background .1s}
+.pin-btn:active{background:var(--primary)}
+.pin-btn.del{font-size:16px;color:var(--text2)}
+.login-error{font-size:13px;color:var(--danger);text-align:center;margin-top:12px;min-height:18px}
+
+/* ── APP ───────────────────────────────────────── */
 #app{display:flex;flex-direction:column;height:100%}
+#app.hidden{display:none}
 #content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(70px + var(--safe-bottom))}
 
-/* Bottom nav */
+/* ── HEADER ────────────────────────────────────── */
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 0;margin-bottom:12px}
+.app-header h1{font-size:18px;font-weight:700}
+.user-pill{display:flex;align-items:center;gap:6px;background:var(--surface);border-radius:20px;padding:5px 10px 5px 5px;cursor:pointer}
+.user-avatar{width:26px;height:26px;border-radius:13px;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+.user-name{font-size:12px;color:var(--text2)}
+
+/* ── NAV ───────────────────────────────────────── */
 #nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;padding-bottom:var(--safe-bottom);z-index:100}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0;border:none;background:transparent;color:var(--text2);font-size:10px;cursor:pointer;transition:color .15s}
 .nav-btn.active{color:var(--primary)}
 .nav-btn svg{width:22px;height:22px}
 
-/* Pages */
+/* ── PAGES ─────────────────────────────────────── */
 .page{display:none;padding:12px}
 .page.active{display:block}
 
-/* Stats bar */
+/* ── STATS BAR ─────────────────────────────────── */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
 .stat-card{background:var(--surface);border-radius:10px;padding:10px 6px;text-align:center}
 .stat-val{font-size:22px;font-weight:600;line-height:1}
 .stat-lbl{font-size:10px;color:var(--text2);margin-top:3px}
-.c-danger{color:var(--danger)}
-.c-warning{color:var(--warning)}
-.c-success{color:var(--success)}
-.c-muted{color:var(--text2)}
+.c-danger{color:var(--danger)}.c-warning{color:var(--warning)}.c-success{color:var(--success)}.c-muted{color:var(--text2)}
 
-/* Search */
+/* ── SEARCH ────────────────────────────────────── */
 .search-wrap{background:var(--surface);border-radius:10px;display:flex;align-items:center;padding:0 12px;margin-bottom:10px;height:42px;gap:8px}
 .search-wrap input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:15px}
 .search-wrap input::placeholder{color:var(--text3)}
 
-/* Filter tabs */
+/* ── TABS ──────────────────────────────────────── */
 .tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{white-space:nowrap;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);transition:all .15s}
+.tab{white-space:nowrap;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2)}
 .tab.active{background:var(--primary);border-color:var(--primary);color:#fff}
 
-/* Task cards */
-.task-card{background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;border-left:4px solid transparent;transition:opacity .2s}
+/* ── TASK CARDS ────────────────────────────────── */
+.task-card{background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;border-left:4px solid transparent}
 .task-card.expired{border-left-color:var(--danger)}
 .task-card.soon{border-left-color:var(--warning)}
 .task-card.ok{border-left-color:var(--success)}
 .task-card.done{opacity:.5}
-.task-check{width:26px;height:26px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.task-check{width:26px;height:26px;flex-shrink:0;cursor:pointer}
 .task-check svg{width:26px;height:26px}
 .task-body{flex:1;min-width:0;cursor:pointer}
 .task-title{font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -81,77 +96,53 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .date-lbl{font-size:12px;font-weight:500}
 .task-note{font-size:12px;color:var(--text3);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .task-del{width:32px;height:32px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:none;background:transparent;color:var(--text3);cursor:pointer;border-radius:8px}
-.task-del:active{background:var(--surface)}
 
-/* Empty */
+/* ── EMPTY ─────────────────────────────────────── */
 .empty{text-align:center;padding:50px 20px;color:var(--text3)}
 .empty svg{width:48px;height:48px;margin:0 auto 10px;display:block;opacity:.4}
 
-/* FAB */
-#fab{position:fixed;bottom:calc(74px + var(--safe-bottom));right:20px;width:56px;height:56px;border-radius:28px;background:var(--primary);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(79,70,229,.5);z-index:99;transition:transform .1s}
+/* ── FAB ───────────────────────────────────────── */
+#fab{position:fixed;bottom:calc(74px + var(--safe-bottom));right:20px;width:56px;height:56px;border-radius:28px;background:var(--primary);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(79,70,229,.5);z-index:99}
 #fab:active{transform:scale(.94)}
 #fab svg{width:28px;height:28px}
 
-/* Modal */
+/* ── MODAL ─────────────────────────────────────── */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;z-index:200;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-bg.open{opacity:1;pointer-events:all}
 .modal{background:var(--surface);border-radius:20px 20px 0 0;padding:20px 16px;padding-bottom:calc(20px + var(--safe-bottom));width:100%;max-height:90vh;overflow-y:auto;transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1)}
 .modal-bg.open .modal{transform:translateY(0)}
 .modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
 .modal h3{font-size:17px;font-weight:600;margin-bottom:16px}
-
-/* Form */
 .form-group{margin-bottom:14px}
 .form-group label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
 .form-group input,.form-group textarea,.form-group select{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text);font-size:15px;outline:none;-webkit-appearance:none}
 .form-group textarea{height:72px;resize:none}
-.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--primary)}
-
-/* Category grid */
+.form-group input:focus,.form-group textarea:focus{border-color:var(--primary)}
 .cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.cat-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 4px;border-radius:10px;border:1px solid var(--border);background:var(--card);cursor:pointer;transition:all .15s}
+.cat-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 4px;border-radius:10px;border:1px solid var(--border);background:var(--card);cursor:pointer}
 .cat-btn span{font-size:10px;color:var(--text2)}
-.cat-btn.selected span{font-weight:600}
 .cat-icon{font-size:22px}
-
-/* Recur pills */
 .recur-pills{display:flex;flex-wrap:wrap;gap:6px}
 .recur-pill{padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:13px;cursor:pointer}
 .recur-pill.active{background:var(--primary);border-color:var(--primary);color:#fff}
-
-/* Amount input with euro */
 .amount-wrap{position:relative}
 .amount-wrap input{padding-left:28px}
-.amount-euro{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:15px}
-
-/* Save button */
+.amount-euro{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text2)}
 .btn-save{width:100%;padding:15px;background:var(--primary);border:none;border-radius:12px;color:#fff;font-size:16px;font-weight:600;cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-save:active{opacity:.85}
 .btn-cancel{width:100%;padding:13px;background:transparent;border:1px solid var(--border);border-radius:12px;color:var(--text2);font-size:15px;cursor:pointer;margin-top:8px}
 
-/* Stats page */
+/* ── STATS PAGE ────────────────────────────────── */
 .section-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin:18px 0 10px}
 .stat-row{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:10px;padding:12px;margin-bottom:8px}
 .stat-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .stat-name{font-size:14px;font-weight:500;flex:1}
 .bar-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
-.bar-fill{height:100%;border-radius:3px;transition:width .4s}
-.stat-count{font-size:13px;color:var(--text2);width:22px;text-align:right}
+.bar-fill{height:100%;border-radius:3px}
 .upcoming-row{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:10px;padding:12px;margin-bottom:8px}
 .upcoming-title{flex:1;font-size:14px}
 .upcoming-days{font-size:13px;font-weight:600}
 
-/* Toast */
-#toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-80px);background:#1e293b;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:999;transition:transform .25s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.4)}
-#toast.show{transform:translateX(-50%) translateY(0)}
-
-/* Loader */
-#loader{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:500;flex-direction:column;gap:14px}
-#loader svg{width:48px;height:48px;animation:spin 1s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-#loader p{color:var(--text2);font-size:14px}
-
-/* Confirm dialog */
+/* ── CONFIRM ───────────────────────────────────── */
 .confirm-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:300;opacity:0;pointer-events:none;transition:opacity .15s;padding:20px}
 .confirm-bg.open{opacity:1;pointer-events:all}
 .confirm-box{background:var(--surface);border-radius:16px;padding:20px;width:100%;max-width:320px}
@@ -161,6 +152,16 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .confirm-btns button{flex:1;padding:12px;border-radius:10px;border:none;font-size:14px;font-weight:500;cursor:pointer}
 .btn-conf-cancel{background:var(--card);color:var(--text)}
 .btn-conf-ok{background:var(--danger);color:#fff}
+
+/* ── TOAST ─────────────────────────────────────── */
+#toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-80px);background:#1e293b;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:999;transition:transform .25s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+#toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── LOADER ────────────────────────────────────── */
+#loader{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:500;flex-direction:column;gap:14px}
+#loader svg{width:48px;height:48px;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loader p{color:var(--text2);font-size:14px}
 </style>
 </head>
 <body>
@@ -172,8 +173,52 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   <p>Caricamento...</p>
 </div>
 
-<div id="app">
+<!-- LOGIN -->
+<div id="login-screen" class="hidden">
+  <div class="login-logo">🏠</div>
+  <div class="login-title">Scadenze Casa</div>
+  <div class="login-sub">Inserisci il PIN di famiglia</div>
+  <div class="login-box">
+    <h3>PIN di accesso</h3>
+    <p>Chiedi il PIN a chi te l'ha condiviso</p>
+    <div class="pin-display" id="pin-display">
+      <div class="pin-dot" id="pd0"></div>
+      <div class="pin-dot" id="pd1"></div>
+      <div class="pin-dot" id="pd2"></div>
+      <div class="pin-dot" id="pd3"></div>
+      <div class="pin-dot" id="pd4"></div>
+      <div class="pin-dot" id="pd5"></div>
+    </div>
+    <div class="pin-grid">
+      <button class="pin-btn" onclick="pinPress('1')">1</button>
+      <button class="pin-btn" onclick="pinPress('2')">2</button>
+      <button class="pin-btn" onclick="pinPress('3')">3</button>
+      <button class="pin-btn" onclick="pinPress('4')">4</button>
+      <button class="pin-btn" onclick="pinPress('5')">5</button>
+      <button class="pin-btn" onclick="pinPress('6')">6</button>
+      <button class="pin-btn" onclick="pinPress('7')">7</button>
+      <button class="pin-btn" onclick="pinPress('8')">8</button>
+      <button class="pin-btn" onclick="pinPress('9')">9</button>
+      <button class="pin-btn" style="opacity:0" disabled></button>
+      <button class="pin-btn" onclick="pinPress('0')">0</button>
+      <button class="pin-btn del" onclick="pinDel()">⌫</button>
+    </div>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
   <div id="content">
+
+    <!-- Header -->
+    <div class="app-header">
+      <h1>🏠 Scadenze Casa</h1>
+      <div class="user-pill" onclick="doLogout()">
+        <div class="user-avatar" id="user-avatar">?</div>
+        <span class="user-name" id="user-name">Esci</span>
+      </div>
+    </div>
 
     <!-- HOME PAGE -->
     <div class="page active" id="page-home">
@@ -201,7 +246,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 
   </div>
 
-  <!-- Bottom nav -->
   <nav id="nav">
     <button class="nav-btn active" data-page="home" onclick="showPage('home')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -214,7 +258,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   </nav>
 </div>
 
-<!-- FAB -->
 <button id="fab" onclick="openForm(null)">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
 </button>
@@ -224,22 +267,18 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   <div class="modal" id="modal">
     <div class="modal-handle"></div>
     <h3 id="modal-title">Nuova scadenza</h3>
-
     <div class="form-group">
       <label>Titolo</label>
       <input type="text" id="f-title" placeholder="Es. Bolletta del gas">
     </div>
-
     <div class="form-group">
       <label>Categoria</label>
       <div class="cat-grid" id="cat-grid"></div>
     </div>
-
     <div class="form-group">
       <label>Data di scadenza</label>
       <input type="date" id="f-date">
     </div>
-
     <div class="form-group">
       <label>Importo (opzionale)</label>
       <div class="amount-wrap">
@@ -247,17 +286,14 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
         <input type="number" id="f-amount" placeholder="0.00" step="0.01" min="0">
       </div>
     </div>
-
     <div class="form-group">
       <label>Ricorrenza</label>
       <div class="recur-pills" id="recur-pills"></div>
     </div>
-
     <div class="form-group">
       <label>Note</label>
       <textarea id="f-note" placeholder="Fornitore, istruzioni, riferimenti..."></textarea>
     </div>
-
     <button class="btn-save" id="btn-save" onclick="saveTask()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:20px;height:20px"><path d="M20 6 9 17l-5-5"/></svg>
       Salva
@@ -278,15 +314,12 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   </div>
 </div>
 
-<!-- Toast -->
 <div id="toast"></div>
 
-<!-- Firebase SDK -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { initializeApp }                          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// ─── FIREBASE CONFIG ──────────────────────────────────────
 const firebaseConfig = {
   apiKey:            "AIzaSyAAWvs0BiX-0CByIe1FeLu2Kfuhl_fuSrg",
   authDomain:        "gestione-family.firebaseapp.com",
@@ -296,145 +329,154 @@ const firebaseConfig = {
   messagingSenderId: "217964413284",
   appId:             "1:217964413284:web:5b32753c7dfb59e3a6ba71"
 };
-// ─────────────────────────────────────────────────────────
 
 const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
 
-// ─── CONSTANTS ───────────────────────────────────────────
+// ── CONSTANTS ──────────────────────────────────────────
 const CATS = [
-  { key:'gas',   label:'Gas',           icon:'🔥', color:'#f59e0b' },
-  { key:'elec',  label:'Elettricità',   icon:'⚡', color:'#facc15' },
-  { key:'water', label:'Acqua',         icon:'💧', color:'#38bdf8' },
-  { key:'condo', label:'Condominio',    icon:'🏢', color:'#a78bfa' },
-  { key:'ins',   label:'Assicurazione', icon:'🛡️', color:'#fb7185' },
-  { key:'maint', label:'Manutenzione',  icon:'🔧', color:'#4ade80' },
-  { key:'tax',   label:'Tasse/IMU',     icon:'📄', color:'#f97316' },
-  { key:'other', label:'Altro',         icon:'📌', color:'#94a3b8' },
+  {key:'gas',  label:'Gas',          icon:'🔥',color:'#f59e0b'},
+  {key:'elec', label:'Elettricità',  icon:'⚡',color:'#facc15'},
+  {key:'water',label:'Acqua',        icon:'💧',color:'#38bdf8'},
+  {key:'condo',label:'Condominio',   icon:'🏢',color:'#a78bfa'},
+  {key:'ins',  label:'Assicurazione',icon:'🛡️',color:'#fb7185'},
+  {key:'maint',label:'Manutenzione', icon:'🔧',color:'#4ade80'},
+  {key:'tax',  label:'Tasse/IMU',    icon:'📄',color:'#f97316'},
+  {key:'other',label:'Altro',        icon:'📌',color:'#94a3b8'},
 ];
 const RECURS = [
-  { key:'none', label:'Mai' },
-  { key:'monthly', label:'Mensile' },
-  { key:'bimonthly', label:'Bimestrale' },
-  { key:'quarterly', label:'Trimestrale' },
-  { key:'yearly', label:'Annuale' },
+  {key:'none',label:'Mai'},{key:'monthly',label:'Mensile'},
+  {key:'bimonthly',label:'Bimestrale'},{key:'quarterly',label:'Trimestrale'},
+  {key:'yearly',label:'Annuale'},
 ];
 const FILTERS = ['Tutte','Scadute','In scadenza','In regola','Completate'];
 
-// ─── STATE ───────────────────────────────────────────────
-let tasks = [];
-let curFilter = 'Tutte';
-let editId = null;
-let deleteId = null;
-let selectedCat = 'other';
-let selectedRecur = 'none';
+// ── STATE ──────────────────────────────────────────────
+let tasks=[], curFilter='Tutte', editId=null, deleteId=null;
+let selectedCat='other', selectedRecur='none';
+let dbUnsub = null;
 
-// ─── HELPERS ─────────────────────────────────────────────
-function today(){ return new Date().toISOString().split('T')[0]; }
-
-function daysLeft(dateStr){
-  const d = new Date(dateStr + 'T00:00:00');
-  const t = new Date(); t.setHours(0,0,0,0);
-  return Math.round((d - t) / 86400000);
-}
-
-function getStatus(task){
-  if(task.done) return 'done';
-  const d = daysLeft(task.date);
-  if(d < 0) return 'expired';
-  if(d <= 7) return 'soon';
-  return 'ok';
-}
-
-function dateLabel(task){
-  if(task.done) return 'Completata';
-  const d = daysLeft(task.date);
-  const nice = new Date(task.date + 'T00:00:00').toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'});
-  if(d < 0) return `Scaduta ${Math.abs(d)} gg fa`;
-  if(d === 0) return 'Scade oggi';
-  if(d <= 7) return `Tra ${d} giorni`;
+// ── HELPERS ────────────────────────────────────────────
+const today = () => new Date().toISOString().split('T')[0];
+function daysLeft(d){ const t=new Date();t.setHours(0,0,0,0);return Math.round((new Date(d+'T00:00:00')-t)/86400000); }
+function getStatus(t){ if(t.done)return'done';const d=daysLeft(t.date);return d<0?'expired':d<=7?'soon':'ok'; }
+function dateLabel(t){
+  if(t.done)return'Completata';
+  const d=daysLeft(t.date);
+  const nice=new Date(t.date+'T00:00:00').toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'});
+  if(d<0)return`Scaduta ${Math.abs(d)} gg fa`;
+  if(d===0)return'Scade oggi';
+  if(d<=7)return`Tra ${d} giorni`;
   return nice;
 }
+function dateColor(t){ return{expired:'var(--danger)',soon:'var(--warning)',ok:'var(--success)',done:'var(--text3)'}[getStatus(t)]; }
+function getCat(k){ return CATS.find(c=>c.key===k)||CATS[7]; }
+function toast(msg){ const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200); }
 
-function dateColor(task){
-  const s = getStatus(task);
-  return { expired:'var(--danger)', soon:'var(--warning)', ok:'var(--success)', done:'var(--text3)' }[s];
+// ── PIN AUTH ───────────────────────────────────────────
+const CORRECT_PIN = '140906';
+let pinEntry = '';
+
+document.getElementById('loader').style.display = 'none';
+if(sessionStorage.getItem('pin_ok')==='1'){ showApp(); } else { showLogin(); }
+
+function showLogin(){
+  if(dbUnsub){ dbUnsub(); dbUnsub=null; }
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('fab').style.display='none';
+  pinEntry=''; updatePinDisplay();
 }
 
-function getCat(key){ return CATS.find(c=>c.key===key) || CATS[7]; }
-
-function toast(msg){
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'), 2200);
+function showApp(){
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('fab').style.display='flex';
+  dbUnsub = onValue(ref(db,'tasks'), snap => {
+    const data=snap.val()||{};
+    tasks=Object.entries(data).map(([id,v])=>({id,...v}));
+    tasks.sort((a,b)=>a.date.localeCompare(b.date));
+    render();
+  });
 }
 
-// ─── FIREBASE LISTENER ───────────────────────────────────
-onValue(ref(db, 'tasks'), snap => {
-  const data = snap.val() || {};
-  tasks = Object.entries(data).map(([id,v])=>({id,...v}));
-  tasks.sort((a,b)=>a.date.localeCompare(b.date));
-  document.getElementById('loader').style.display = 'none';
-  render();
-  scheduleNotifications();
-});
-
-// ─── RENDER ──────────────────────────────────────────────
-function render(){
-  renderStats();
-  renderFilters();
-  renderList();
-  renderStatsPage();
+window.pinPress=function(digit){
+  if(pinEntry.length>=CORRECT_PIN.length)return;
+  pinEntry+=digit; updatePinDisplay();
+  if(pinEntry.length===CORRECT_PIN.length) setTimeout(checkPin,100);
+};
+window.pinDel=function(){
+  pinEntry=pinEntry.slice(0,-1);
+  document.getElementById('login-error').textContent='';
+  updatePinDisplay();
+};
+function updatePinDisplay(){
+  for(let i=0;i<CORRECT_PIN.length;i++){
+    const dot=document.getElementById('pd'+i);
+    dot.classList.toggle('filled',i<pinEntry.length);
+    dot.classList.remove('error');
+  }
 }
+function checkPin(){
+  if(pinEntry===CORRECT_PIN){
+    sessionStorage.setItem('pin_ok','1');
+    showApp();
+  } else {
+    document.getElementById('login-error').textContent='PIN errato, riprova';
+    for(let i=0;i<CORRECT_PIN.length;i++) document.getElementById('pd'+i).classList.add('error');
+    setTimeout(()=>{ pinEntry=''; updatePinDisplay(); document.getElementById('login-error').textContent=''; },800);
+  }
+}
+window.doLogout=function(){
+  if(!confirm('Vuoi uscire?'))return;
+  sessionStorage.removeItem('pin_ok');
+  showLogin();
+  toast('Uscita effettuata');
+};
+
+// ── RENDER ─────────────────────────────────────────────
+function render(){ renderStats(); renderFilters(); renderList(); }
 
 function renderStats(){
-  const expired = tasks.filter(t=>getStatus(t)==='expired').length;
-  const soon    = tasks.filter(t=>getStatus(t)==='soon').length;
-  const ok      = tasks.filter(t=>getStatus(t)==='ok').length;
-  const done    = tasks.filter(t=>t.done).length;
-  const html = `
+  const expired=tasks.filter(t=>getStatus(t)==='expired').length;
+  const soon=tasks.filter(t=>getStatus(t)==='soon').length;
+  const ok=tasks.filter(t=>getStatus(t)==='ok').length;
+  const done=tasks.filter(t=>t.done).length;
+  const html=`
     <div class="stat-card"><div class="stat-val c-danger">${expired}</div><div class="stat-lbl">Scadute</div></div>
     <div class="stat-card"><div class="stat-val c-warning">${soon}</div><div class="stat-lbl">In scadenza</div></div>
     <div class="stat-card"><div class="stat-val c-success">${ok}</div><div class="stat-lbl">In regola</div></div>
     <div class="stat-card"><div class="stat-val c-muted">${done}</div><div class="stat-lbl">Completate</div></div>`;
-  document.getElementById('stats-grid').innerHTML = html;
-  document.getElementById('stats-grid2').innerHTML = html;
+  document.getElementById('stats-grid').innerHTML=html;
+  document.getElementById('stats-grid2').innerHTML=html;
 }
 
 function renderFilters(){
-  document.getElementById('filter-tabs').innerHTML = FILTERS.map(f=>
+  document.getElementById('filter-tabs').innerHTML=FILTERS.map(f=>
     `<button class="tab ${f===curFilter?'active':''}" onclick="setFilter('${f}')">${f}</button>`
   ).join('');
 }
 
 function renderList(){
-  const search = document.getElementById('search-input').value.toLowerCase();
-  let list = [...tasks];
-  if(curFilter==='Scadute')     list = list.filter(t=>getStatus(t)==='expired');
-  else if(curFilter==='In scadenza') list = list.filter(t=>getStatus(t)==='soon');
-  else if(curFilter==='In regola')   list = list.filter(t=>getStatus(t)==='ok');
-  else if(curFilter==='Completate')  list = list.filter(t=>t.done);
-  if(search) list = list.filter(t=>t.title.toLowerCase().includes(search)||(t.note||'').toLowerCase().includes(search));
-
-  const el = document.getElementById('task-list');
+  const search=document.getElementById('search-input').value.toLowerCase();
+  let list=[...tasks];
+  if(curFilter==='Scadute')list=list.filter(t=>getStatus(t)==='expired');
+  else if(curFilter==='In scadenza')list=list.filter(t=>getStatus(t)==='soon');
+  else if(curFilter==='In regola')list=list.filter(t=>getStatus(t)==='ok');
+  else if(curFilter==='Completate')list=list.filter(t=>t.done);
+  if(search)list=list.filter(t=>t.title.toLowerCase().includes(search)||(t.note||'').toLowerCase().includes(search));
+  const el=document.getElementById('task-list');
   if(!list.length){
-    el.innerHTML = `<div class="empty">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
-      <p>Nessuna scadenza</p>
-    </div>`;
+    el.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><p>Nessuna scadenza</p></div>`;
     return;
   }
-  el.innerHTML = list.map(t=>{
-    const s = getStatus(t);
-    const cat = getCat(t.cat);
-    const dc = dateColor(t);
-    return `<div class="task-card ${s}" id="tc-${t.id}">
+  el.innerHTML=list.map(t=>{
+    const s=getStatus(t);const cat=getCat(t.cat);const dc=dateColor(t);
+    return`<div class="task-card ${s}">
       <div class="task-check" onclick="toggleDone('${t.id}')">
         ${t.done
-          ? `<svg viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`
-          : `<svg viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>`
-        }
+          ?`<svg viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`
+          :`<svg viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>`}
       </div>
       <div class="task-body" onclick="openForm('${t.id}')">
         <div class="task-title ${t.done?'strike':''}">${t.title}${t.amount?` <span style="color:var(--text2);font-size:13px;font-weight:400">€${parseFloat(t.amount).toFixed(0)}</span>`:''}</div>
@@ -452,191 +494,84 @@ function renderList(){
 }
 
 function renderStatsPage(){
-  // Category breakdown
-  const catEl = document.getElementById('cat-stats');
-  const bycat = CATS.map(c=>({
-    ...c,
-    count: tasks.filter(t=>t.cat===c.key).length,
-    amount: tasks.filter(t=>t.cat===c.key&&t.amount).reduce((s,t)=>s+parseFloat(t.amount||0),0)
-  })).filter(c=>c.count>0).sort((a,b)=>b.count-a.count);
-  catEl.innerHTML = bycat.map(c=>`
-    <div class="stat-row">
-      <div class="stat-icon" style="background:${c.color}22">${c.icon}</div>
-      <div class="stat-name">${c.label}</div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:${Math.min(c.count/tasks.length*100,100)}%;background:${c.color}"></div></div>
-      <div class="stat-count">${c.count}</div>
-      ${c.amount>0?`<div style="font-size:12px;color:var(--text3);width:46px;text-align:right">€${c.amount.toFixed(0)}</div>`:''}
-    </div>`).join('') || '<p style="color:var(--text3);font-size:14px">Nessun dato</p>';
-
-  // Upcoming
-  const now = new Date(); now.setHours(0,0,0,0);
-  const upcoming = tasks.filter(t=>!t.done&&daysLeft(t.date)>=0).slice(0,6);
-  const upEl = document.getElementById('upcoming-list');
-  upEl.innerHTML = upcoming.map(t=>{
-    const d = daysLeft(t.date);
-    const cat = getCat(t.cat);
-    const col = d<=3?'var(--danger)':d<=7?'var(--warning)':'var(--text2)';
-    return `<div class="upcoming-row">
-      <span style="font-size:20px">${cat.icon}</span>
-      <span class="upcoming-title">${t.title}</span>
-      <span class="upcoming-days" style="color:${col}">${d===0?'Oggi':d+'gg'}</span>
-    </div>`;
-  }).join('') || '<p style="color:var(--text3);font-size:14px">Nessuna scadenza imminente</p>';
+  const catEl=document.getElementById('cat-stats');
+  const bycat=CATS.map(c=>({...c,count:tasks.filter(t=>t.cat===c.key).length,amount:tasks.filter(t=>t.cat===c.key&&t.amount).reduce((s,t)=>s+parseFloat(t.amount||0),0)})).filter(c=>c.count>0).sort((a,b)=>b.count-a.count);
+  catEl.innerHTML=bycat.map(c=>`<div class="stat-row"><div class="stat-icon" style="background:${c.color}22">${c.icon}</div><div class="stat-name">${c.label}</div><div class="bar-wrap"><div class="bar-fill" style="width:${Math.min(c.count/tasks.length*100,100)}%;background:${c.color}"></div></div><div class="stat-count">${c.count}</div>${c.amount>0?`<div style="font-size:12px;color:var(--text3);width:46px;text-align:right">€${c.amount.toFixed(0)}</div>`:''}</div>`).join('')||'<p style="color:var(--text3);font-size:14px">Nessun dato</p>';
+  const upcoming=tasks.filter(t=>!t.done&&daysLeft(t.date)>=0).slice(0,6);
+  document.getElementById('upcoming-list').innerHTML=upcoming.map(t=>{const d=daysLeft(t.date);const cat=getCat(t.cat);const col=d<=3?'var(--danger)':d<=7?'var(--warning)':'var(--text2)';return`<div class="upcoming-row"><span style="font-size:20px">${cat.icon}</span><span class="upcoming-title">${t.title}</span><span class="upcoming-days" style="color:${col}">${d===0?'Oggi':d+'gg'}</span></div>`;}).join('')||'<p style="color:var(--text3);font-size:14px">Nessuna scadenza imminente</p>';
 }
 
-// ─── ACTIONS ─────────────────────────────────────────────
-window.setFilter = function(f){
-  curFilter = f;
-  renderFilters();
-  renderList();
-};
+// ── ACTIONS ────────────────────────────────────────────
+window.setFilter=function(f){curFilter=f;renderFilters();renderList();};
+window.toggleDone=async function(id){const t=tasks.find(t=>t.id===id);if(!t)return;await update(ref(db,`tasks/${id}`),{done:!t.done});toast(t.done?'Segnata come attiva':'Completata!');};
+window.askDelete=function(id,title){deleteId=id;document.getElementById('confirm-msg').textContent=`Eliminare "${title}"?`;document.getElementById('confirm-bg').classList.add('open');};
+window.closeConfirm=function(){document.getElementById('confirm-bg').classList.remove('open');deleteId=null;};
+window.confirmDelete=async function(){if(!deleteId)return;await remove(ref(db,`tasks/${deleteId}`));closeConfirm();toast('Scadenza eliminata');};
 
-window.toggleDone = async function(id){
-  const t = tasks.find(t=>t.id===id);
-  if(!t) return;
-  await update(ref(db,`tasks/${id}`), { done: !t.done });
-  toast(t.done ? 'Segnata come attiva' : 'Completata!');
-};
-
-window.askDelete = function(id, title){
-  deleteId = id;
-  document.getElementById('confirm-msg').textContent = `Eliminare "${title}"?`;
-  document.getElementById('confirm-bg').classList.add('open');
-};
-
-window.closeConfirm = function(){
-  document.getElementById('confirm-bg').classList.remove('open');
-  deleteId = null;
-};
-
-window.confirmDelete = async function(){
-  if(!deleteId) return;
-  await remove(ref(db,`tasks/${deleteId}`));
-  closeConfirm();
-  toast('Scadenza eliminata');
-};
-
-// ─── FORM ────────────────────────────────────────────────
+// ── FORM ───────────────────────────────────────────────
 function buildCatGrid(){
-  document.getElementById('cat-grid').innerHTML = CATS.map(c=>`
-    <div class="cat-btn ${selectedCat===c.key?'selected':''}" 
-         style="${selectedCat===c.key?`border-color:${c.color};background:${c.color}22`:''}"
-         onclick="selectCat('${c.key}')">
-      <span class="cat-icon">${c.icon}</span>
-      <span style="${selectedCat===c.key?`color:${c.color}`:''};">${c.label}</span>
-    </div>`).join('');
+  document.getElementById('cat-grid').innerHTML=CATS.map(c=>`<div class="cat-btn ${selectedCat===c.key?'selected':''}" style="${selectedCat===c.key?`border-color:${c.color};background:${c.color}22`:''}" onclick="selectCat('${c.key}')"><span class="cat-icon">${c.icon}</span><span style="${selectedCat===c.key?`color:${c.color}`:''}">${c.label}</span></div>`).join('');
 }
-
 function buildRecurPills(){
-  document.getElementById('recur-pills').innerHTML = RECURS.map(r=>`
-    <button class="recur-pill ${selectedRecur===r.key?'active':''}" onclick="selectRecur('${r.key}')">${r.label}</button>`
-  ).join('');
+  document.getElementById('recur-pills').innerHTML=RECURS.map(r=>`<button class="recur-pill ${selectedRecur===r.key?'active':''}" onclick="selectRecur('${r.key}')">${r.label}</button>`).join('');
 }
-
-window.selectCat = function(key){
-  selectedCat = key;
-  buildCatGrid();
-};
-
-window.selectRecur = function(key){
-  selectedRecur = key;
-  buildRecurPills();
-};
-
-window.openForm = function(id){
-  editId = id;
-  const t = id ? tasks.find(t=>t.id===id) : null;
-  document.getElementById('modal-title').textContent = t ? 'Modifica scadenza' : 'Nuova scadenza';
-  document.getElementById('f-title').value = t?.title || '';
-  document.getElementById('f-date').value  = t?.date  || today();
-  document.getElementById('f-amount').value = t?.amount || '';
-  document.getElementById('f-note').value  = t?.note  || '';
-  selectedCat   = t?.cat   || 'other';
-  selectedRecur = t?.recur || 'none';
-  buildCatGrid();
-  buildRecurPills();
+window.selectCat=function(k){selectedCat=k;buildCatGrid();};
+window.selectRecur=function(k){selectedRecur=k;buildRecurPills();};
+window.openForm=function(id){
+  editId=id;const t=id?tasks.find(t=>t.id===id):null;
+  document.getElementById('modal-title').textContent=t?'Modifica scadenza':'Nuova scadenza';
+  document.getElementById('f-title').value=t?.title||'';
+  document.getElementById('f-date').value=t?.date||today();
+  document.getElementById('f-amount').value=t?.amount||'';
+  document.getElementById('f-note').value=t?.note||'';
+  selectedCat=t?.cat||'other';selectedRecur=t?.recur||'none';
+  buildCatGrid();buildRecurPills();
   document.getElementById('modal-bg').classList.add('open');
-  setTimeout(()=>document.getElementById('f-title').focus(), 300);
+  setTimeout(()=>document.getElementById('f-title').focus(),300);
 };
-
-window.closeForm = function(){
-  document.getElementById('modal-bg').classList.remove('open');
-  editId = null;
-};
-
-window.handleModalBgClick = function(e){
-  if(e.target.id === 'modal-bg') closeForm();
-};
-
-window.saveTask = async function(){
-  const title  = document.getElementById('f-title').value.trim();
-  const date   = document.getElementById('f-date').value;
-  const amount = document.getElementById('f-amount').value;
-  const note   = document.getElementById('f-note').value.trim();
-  if(!title){ document.getElementById('f-title').focus(); return; }
-  if(!date) return;
-
-  const btn = document.getElementById('btn-save');
-  btn.disabled = true;
-  btn.textContent = 'Salvataggio...';
-
-  const payload = { title, cat:selectedCat, date, amount, recur:selectedRecur, note, updatedAt:Date.now() };
-  try {
-    if(editId){
-      await update(ref(db,`tasks/${editId}`), payload);
-      toast('Scadenza aggiornata');
-    } else {
-      payload.done = false;
-      payload.createdAt = Date.now();
-      await push(ref(db,'tasks'), payload);
-      toast('Scadenza aggiunta');
-    }
+window.closeForm=function(){document.getElementById('modal-bg').classList.remove('open');editId=null;};
+window.handleModalBgClick=function(e){if(e.target.id==='modal-bg')closeForm();};
+window.saveTask=async function(){
+  const title=document.getElementById('f-title').value.trim();
+  const date=document.getElementById('f-date').value;
+  const amount=document.getElementById('f-amount').value;
+  const note=document.getElementById('f-note').value.trim();
+  if(!title){document.getElementById('f-title').focus();return;}
+  if(!date)return;
+  const btn=document.getElementById('btn-save');
+  btn.disabled=true;btn.textContent='Salvataggio...';
+  const payload={title,cat:selectedCat,date,amount,recur:selectedRecur,note,updatedAt:Date.now()};
+  try{
+    if(editId){await update(ref(db,`tasks/${editId}`),payload);toast('Scadenza aggiornata');}
+    else{payload.done=false;payload.createdAt=Date.now();await push(ref(db,'tasks'),payload);toast('Scadenza aggiunta');}
     closeForm();
-  } catch(e){
-    toast('Errore: ' + e.message);
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:20px;height:20px"><path d="M20 6 9 17l-5-5"/></svg> Salva';
-  }
+  }catch(e){toast('Errore: '+e.message);}
+  finally{btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:20px;height:20px"><path d="M20 6 9 17l-5-5"/></svg> Salva';}
 };
 
-// ─── NAVIGATION ──────────────────────────────────────────
-window.showPage = function(name){
+// ── NAVIGATION ─────────────────────────────────────────
+window.showPage=function(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById(`page-${name}`).classList.add('active');
   document.querySelector(`[data-page="${name}"]`).classList.add('active');
-  document.getElementById('fab').style.display = name==='home' ? 'flex' : 'none';
-  document.getElementById('content').scrollTop = 0;
-  if(name==='stats') renderStatsPage();
+  document.getElementById('fab').style.display=name==='home'?'flex':'none';
+  document.getElementById('content').scrollTop=0;
+  if(name==='stats')renderStatsPage();
 };
 
-// ─── SEARCH ──────────────────────────────────────────────
-document.getElementById('search-input').addEventListener('input', function(){
-  document.getElementById('search-clear').style.display = this.value ? 'block' : 'none';
+// ── SEARCH ─────────────────────────────────────────────
+document.getElementById('search-input').addEventListener('input',function(){
+  document.getElementById('search-clear').style.display=this.value?'block':'none';
   renderList();
 });
-document.getElementById('search-clear').addEventListener('click', ()=>{
-  document.getElementById('search-input').value = '';
-  document.getElementById('search-clear').style.display = 'none';
+document.getElementById('search-clear').addEventListener('click',()=>{
+  document.getElementById('search-input').value='';
+  document.getElementById('search-clear').style.display='none';
   renderList();
 });
 
-// ─── NOTIFICATIONS ───────────────────────────────────────
-async function scheduleNotifications(){
-  if(!('Notification' in window)) return;
-  if(Notification.permission === 'default') await Notification.requestPermission();
-  if(Notification.permission !== 'granted') return;
-  // SW handles actual scheduling — here we just check for due today
-  const dueSoon = tasks.filter(t=>!t.done && daysLeft(t.date)<=3 && daysLeft(t.date)>=0);
-  if(dueSoon.length && 'serviceWorker' in navigator){
-    navigator.serviceWorker.ready.then(sw=>{
-      sw.active?.postMessage({ type:'CHECK_TASKS', tasks: dueSoon });
-    });
-  }
-}
-
-// ─── SERVICE WORKER ──────────────────────────────────────
+// ── SERVICE WORKER ─────────────────────────────────────
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
